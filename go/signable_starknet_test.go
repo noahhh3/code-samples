@@ -83,15 +83,12 @@ func BenchmarkGnarkSignSingleOrder(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		hash, err = HashTypedData(testAccountAddress, *td)
 		require.NoError(b, err)
-		sig, err := priv.Sign(hash.Bytes(), nil)
+		sig, err = priv.Sign(hash.Bytes(), nil)
 		require.NoError(b, err)
 		valid, err := priv.PublicKey.Verify(sig, hash.Bytes(), nil)
 		require.Truef(b, valid, "signature is invalid: %v", err)
 		sum = sum.Add(sum, hash)
 	}
-	valid, err := priv.PublicKey.Verify(sig, hash.Bytes(), nil)
-	require.Truef(b, valid, "signature is invalid: %v", err)
-	require.NoError(b, err)
 }
 
 func BenchmarkGnarkVerifySingleOrder(b *testing.B) {
